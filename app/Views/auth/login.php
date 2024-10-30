@@ -3,8 +3,10 @@ $pageTitle = 'Login';
 ob_start();
 ?>
 <div class="container h-100 d-flex justify-content-center align-items-center">
-    <div class="card px-4 py-5" style="width: 400px; height: 350px" >
+    <div class="card px-4 py-4" style="width: 400px; height: 350px">
         <form class="">
+
+            <div class="text-danger error_text mt-1" id="invalid-error" style="visibility: hidden;">Invalid email or password</div>
 
             <div data-mdb-input-init class="form-outline">
                 <label class="form-label" for="login_email_address">Email address</label>
@@ -42,10 +44,12 @@ include_once __DIR__ . '/auth.php';
             formData.append('email', $('#login_email_address').val());
             formData.append('password', $('#login_password').val());
 
-            const loginLoadingMessage = document.getElementById('login-loading-message');
-            const signInButton = document.getElementById('sign_in_button')
-            signInButton.style.display = "none";
-            loginLoadingMessage.style.display = 'block';
+            const $loginLoadingMessage = $('#login-loading-message');
+            const $signInButton = $('#sign_in_button');
+            $signInButton.hide();
+            $loginLoadingMessage.show();
+
+            $("#login-email-error, #login-password-error, #invalid-error").css({ visibility: 'hidden' });
 
             $.ajax({
                 url: '/sign_in',
@@ -59,27 +63,26 @@ include_once __DIR__ . '/auth.php';
                     }
                     if (response.success) {
                         setTimeout(() => {
-                            loginLoadingMessage.style.display = "none";
+                            $loginLoadingMessage.hide();
                             alert(response.message);
                             window.location.href = '/';
-                        }, 1000)
-
+                        }, 1000);
                     } else {
-                        signInButton.style.display = "block";
-                        loginLoadingMessage.style.display = 'none';
+                        $signInButton.show();
+                        $loginLoadingMessage.hide();
+
                         if (response.errors) {
                             if (response.errors.email) {
-                                document.getElementById('login-email-error').textContent = response.errors.email;
-                                document.getElementById('login-email-error').style.visibility = 'visible';
+                                $('#login-email-error').text(response.errors.email).css({ visibility: 'visible' });
                             }
                             if (response.errors.password) {
-                                document.getElementById('login-password-error').textContent = response.errors.password;
-                                document.getElementById('login-password-error').style.visibility = 'visible';
+                                $('#login-password-error').text(response.errors.password).css({ visibility: 'visible' });
                             }
                         } else {
+                            $("#invalid-error").css({ visibility: 'visible' }).text(response.message);
                             setTimeout(() => {
-                                loginLoadingMessage.style.display = 'none';
-                            }, 1000)
+                                $loginLoadingMessage.hide();
+                            }, 1000);
                         }
                     }
                 },

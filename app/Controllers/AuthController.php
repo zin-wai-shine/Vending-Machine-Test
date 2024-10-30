@@ -2,8 +2,6 @@
 namespace App\Controllers;
 use App\Core\Database;
 
-session_start();
-
 class AuthController{
     private $db;
 
@@ -117,7 +115,8 @@ class AuthController{
 
     public function logout(){
         session_destroy();
-        header("location: /");
+        header("location: /login");
+        exit();
     }
 
     public function isAuthenticated() {
@@ -127,5 +126,6 @@ class AuthController{
     public function getUserRole() {
         return $_SESSION['role'] ?? null;
     }
+
 
 }

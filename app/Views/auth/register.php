@@ -1,5 +1,5 @@
 <?php
-$pageTitle = 'Login';
+$pageTitle = 'Register';
 ob_start();
 ?>
 <div class="container h-100 d-flex justify-content-center align-items-center">
@@ -49,10 +49,10 @@ include_once __DIR__ . '/auth.php';
             formData.append('email', $('#email_address').val());
             formData.append('password', $('#password').val());
 
-            const registerLoadingMessage = document.getElementById('register-loading-message');
-            const signUpButton = document.getElementById('sign_up_button')
-            signUpButton.style.display = "none";
-            registerLoadingMessage.style.display = 'block';
+            const $registerLoadingMessage = $('#register-loading-message');
+            const $signUpButton = $('#sign_up_button');
+            $signUpButton.hide();
+            $registerLoadingMessage.show();
 
             $.ajax({
                 url: '/sign_up',
@@ -69,32 +69,29 @@ include_once __DIR__ . '/auth.php';
                         window.location.href = '/login';
 
                         setTimeout(() => {
-                            registerLoadingMessage.style.display = "none";
+                            $registerLoadingMessage.hide();
                             alert(response.message);
                             window.location.href = '/login';
-                        }, 1000)
+                        }, 1000);
 
                     } else {
-                        signUpButton.style.display = "block";
-                        registerLoadingMessage.style.display = 'none';
+                        $signUpButton.show();
+                        $registerLoadingMessage.hide();
                         if (response.errors) {
 
                             if (response.errors.username) {
-                                document.getElementById('username-error').textContent = response.errors.username;
-                                document.getElementById('username-error').style.visibility = 'visible';
+                                $('#username-error').text(response.errors.username).css({ visibility: 'visible' });
                             }
                             if (response.errors.email) {
-                                document.getElementById('email-error').textContent = response.errors.email;
-                                document.getElementById('email-error').style.visibility = 'visible';
+                                $('#email-error').text(response.errors.email).css({ visibility: 'visible' });
                             }
                             if (response.errors.password) {
-                                document.getElementById('password-error').textContent = response.errors.password;
-                                document.getElementById('password-error').style.visibility = 'visible';
+                                $('#password-error').text(response.errors.password).css({ visibility: 'visible' });
                             }
                         } else {
                             setTimeout(() => {
-                                registerLoadingMessage.style.display = 'none';
-                            }, 1000)
+                                $registerLoadingMessage.hide();
+                            }, 1000);
                         }
                     }
                 },

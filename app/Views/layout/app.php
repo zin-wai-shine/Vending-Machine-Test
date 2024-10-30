@@ -81,11 +81,32 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 <script>
+    $('#adminLogoutButton').on('click', function() {
+        const confirmLogout = confirm("Are you sure you want to logout?");
+        if (confirmLogout) {
+            $.ajax({
+                url: '/logout',
+                method: 'GET',
+                success: function(response) {
+                    alert("You have logged out successfully!");
+                    window.location.href = '/login';
+                },
+                error: function(xhr, status, error) {
+                    alert("Logout failed. Please try again.");
+                    console.error("Logout error:", error);
+                }
+            });
+        } else {
+            alert("Logout cancelled.");
+        }
+    });
     // Sidebar toggle script
     document.getElementById('toggleSidebar').addEventListener('click', function() {
         document.getElementById('sidebar').classList.toggle('collapsed');
         document.getElementById('main-content').classList.toggle('collapsed');
     });
+
+
 </script>
 
 </body>

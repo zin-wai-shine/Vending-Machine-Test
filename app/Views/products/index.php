@@ -336,7 +336,6 @@ if (!empty($products)): ?>
     });
 
 
-
 </script>
 
 

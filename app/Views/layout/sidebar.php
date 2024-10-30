@@ -4,8 +4,8 @@
 <!--        <i class="bi bi-arrow-left-square"></i> -->
 <!--    </button>-->
     <ul class="nav flex-column gap-2">
-        <li class="nav-item"><a class="nav-link sidebar-link" href="#">Users</a></li>
+        <li class="nav-item"><a class="nav-link sidebar-link" href="/users">Users</a></li>
         <li class="nav-item"><a class="nav-link sidebar-link" href="/products">Products</a></li>
-        <li class="nav-item"><a class="nav-link sidebar-link" href="#">Settings</a></li>
+        <li class="nav-item"><a class="nav-link sidebar-link" href="/transactions">Transactions</a></li>
     </ul>
 </div>
