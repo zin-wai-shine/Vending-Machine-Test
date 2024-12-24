@@ -3,11 +3,13 @@ namespace App\Controllers;
 use App\Core\Database;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+require_once '../config/config.php';
 
 class AuthController{
     private $db;
 
     public function __construct(){
+        $base_url = BASE_URL;
         $this->db = (new Database())->getConnection();
     }
 
@@ -68,11 +70,10 @@ class AuthController{
                 $key = bin2hex(random_bytes(32));
                 $userId = $this->db->lastInsertId();
                 $payload = [
-                    "iss" => "http://localhost:8000",
-                    "aud" => "http://localhost:8000",
+                    "iss" =>  $base_url,
+                    "aud" =>  $base_url,
                     "iat" => time(),
                     "nbf" => time(),
-//                    "exp" => time() + (60 * 60),
                     "data" => [
                         "id" => $userId,
                         "username" => $data['username'],
@@ -126,9 +127,8 @@ class AuthController{
 
                 $key = bin2hex(random_bytes(32));
                 $payload = [
-                    "iss" => "http://localhost:8000",
+                    "iss" =>  $base_url,
                     "iat" => time(), //
-                    "exp" => time() + (60 * 60 * 24),
                     "user" => [
                         "id" => $user['id'],
                         "username" => $user['username'],
