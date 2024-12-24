@@ -32,9 +32,9 @@ if (!empty($products)): ?>
                     </form>
                 </div>
                 <div class="modal-footer d-flex justify-content-between align-items-center">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
                     <button class="btn btn-primary bg-primary" id="loading-message" disabled style="display: none;">Loading...</button>
-                    <button type="button" class="btn btn-primary" id="save-product">Save changes</button>
+                    <button type="button" class="btn btn-sm btn-primary" id="save-product">Save changes</button>
                 </div>
             </div>
         </div>
@@ -70,9 +70,9 @@ if (!empty($products)): ?>
                     </form>
                 </div>
                 <div class="modal-footer d-flex justify-content-between align-items-center">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
                     <button class="btn btn-primary bg-primary" id="edit-loading-message" disabled style="display: none;">loading...</button>
-                    <button type="button" class="btn btn-primary" id="update-product">Update</button>
+                    <button type="button" class="btn btn-sm btn-primary" id="update-product">Update</button>
                 </div>
             </div>
         </div>
@@ -80,7 +80,7 @@ if (!empty($products)): ?>
 
     <div class="d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Product Lists</h5>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createNewProductModal">
+        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#createNewProductModal">
             Add new product
         </button>
     </div>
@@ -106,9 +106,9 @@ if (!empty($products)): ?>
                 <td>$ <?php echo htmlspecialchars($product['price']); ?></td>
                 <td><?php echo htmlspecialchars($product['quantity_available']); ?></td>
                 <td>
-                    <button class="btn btn-warning edit-product" data-id="<?php echo $product['id']; ?>">Edit</button>
+                    <button class="btn btn-sm btn-warning edit-product" data-id="<?php echo $product['id']; ?>">Edit</button>
                     <form id="delete-form-<?php echo $product['id']; ?>" style="display:inline;">
-                        <button type="button" class="btn btn-danger delete-product" data-id="<?php echo $product['id']; ?>">Delete</button>
+                        <button type="button" class="btn btn-sm btn-danger delete-product" data-id="<?php echo $product['id']; ?>">Delete</button>
                     </form>
                 </td>
             </tr>

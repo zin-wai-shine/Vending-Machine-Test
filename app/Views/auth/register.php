@@ -65,6 +65,7 @@ include_once __DIR__ . '/auth.php';
                         response = JSON.parse(response);
                     }
                     if (response.success) {
+                        console.log(response);
                         alert(response.message);
                         window.location.href = '/login';
 

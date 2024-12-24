@@ -1,6 +1,8 @@
 <?php
 namespace App\Controllers;
 use App\Core\Database;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class AuthController{
     private $db;
@@ -29,7 +31,7 @@ class AuthController{
         }
     }
 
-    public function register() { // Default role for User is 1
+    public function register() {
         $data = [
             'username' => $_POST['username'] ?? null,
             'email' => $_POST['email'] ?? null,
@@ -42,10 +44,10 @@ class AuthController{
             $errors['username'] = 'Username is required';
         }
         if (empty($data['email'])) {
-            $errors['email'] = 'Price is required';
+            $errors['email'] = 'Email is required';
         }
         if (empty($data['password'])) {
-            $errors['password'] = 'Quantity is required';
+            $errors['password'] = 'Password is required';
         }
 
         if (!empty($errors)) {
@@ -59,13 +61,31 @@ class AuthController{
             $stmt = $this->db->prepare($query);
 
             $stmt->bindParam(":username", $data['username']);
-            $stmt->bindParam(":email", $data['email']); // Bind email
+            $stmt->bindParam(":email", $data['email']);
             $stmt->bindParam(":password", $hashedPassword);
-        }
-        if ($stmt->execute()) {
-            echo json_encode(['success' => true, 'message' => 'Sign up Successfully!.']);
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Sign up failed!']);
+
+            if ($stmt->execute()) {
+                $key = bin2hex(random_bytes(32));
+                $userId = $this->db->lastInsertId();
+                $payload = [
+                    "iss" => "http://localhost:8000",
+                    "aud" => "http://localhost:8000",
+                    "iat" => time(),
+                    "nbf" => time(),
+//                    "exp" => time() + (60 * 60),
+                    "data" => [
+                        "id" => $userId,
+                        "username" => $data['username'],
+                        "email" => $data['email']
+                    ]
+                ];
+
+                $jwt = JWT::encode($payload, $key, 'HS256');
+
+                echo json_encode(['success' => true, 'message' => 'Sign up successfully!', 'token' => $jwt]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Sign up failed!']);
+            }
         }
     }
 
@@ -96,15 +116,32 @@ class AuthController{
         $stmt->execute();
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
+
         if ($user) {
             if (password_verify($data['password'], $user['password'])) {
-
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['role'] = $user['role'];
 
-                echo json_encode(['success' => true, 'message' => 'login Successfully!.']);
+                $key = bin2hex(random_bytes(32));
+                $payload = [
+                    "iss" => "http://localhost:8000",
+                    "iat" => time(), //
+                    "exp" => time() + (60 * 60 * 24),
+                    "user" => [
+                        "id" => $user['id'],
+                        "username" => $user['username'],
+                        "email" => $user['email'],
+                        "role" => $user['role']
+                    ]
+                ];
+                $jwt = JWT::encode($payload, $key, 'HS256');
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Login successful!',
+                    'token' => $jwt
+                ]);
             } else {
                 echo json_encode(['success' => false, 'message' => 'Invalid email or password']);
             }
