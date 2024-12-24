@@ -6,4 +6,5 @@
   "scripts": {
     "scss": "node-sass -w public/sass/app.scss -o public/css/"
   }
+  
 }
